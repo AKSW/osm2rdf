@@ -29,7 +29,13 @@ clean-input:
 build:
 	cmake -S . -B build
 
+build-debug:
+	cmake -DCMAKE_BUILD_TYPE=Debug -S . -B build
+
 compile: build
+	cmake --build build --target osm2rdf osm2rdf-stats
+
+compile-debug: build-debug
 	cmake --build build --target osm2rdf osm2rdf-stats
 
 checkstyle:
@@ -80,9 +86,14 @@ docker-dirs:
 docker-build:
 	${DOCKER} build -t osm2rdf .
 
+docker-build-debug:
+	${DOCKER} build -f Dockerfile.debug -t osm2rdf-debug .
+
 docker-fr: docker-dirs docker-build input/freiburg-regbez-latest.osm.pbf
-	${DOCKER} build -t osm2rdf .
 	${DOCKER} run --rm -v `pwd`/input/:/input/ -v `pwd`/output/:/output/ -v `pwd`/scratch/:/scratch/ -it osm2rdf /input/freiburg-regbez-latest.osm.pbf -o /output/freiburg-regbez-latest.osm.ttl -t /scratch/
+
+docker-fr-debug: docker-dirs docker-build-debug input/freiburg-regbez-latest.osm.pbf
+	${DOCKER} run --cap-add=SYS_PTRACE --rm -v `pwd`/input/:/input/ -v `pwd`/output/:/output/ -v `pwd`/scratch/:/scratch/ -it osm2rdf-debug -x /app/gdb.settings --args /app/build/apps/osm2rdf /input/freiburg-regbez-latest.osm.pbf -o /output/freiburg-regbez-latest.osm.ttl -t /scratch/
 
 docker-bw: docker-dirs docker-build input/baden-wuerttemberg-latest.osm.pbf
 	${DOCKER} run --rm -v `pwd`/input/:/input/ -v `pwd`/output/:/output/ -v `pwd`/scratch/:/scratch/ -it osm2rdf /input/baden-wuerttemberg-latest.osm.pbf -o /output/baden-wuerttemberg-latest.osm.ttl -t /scratch/
