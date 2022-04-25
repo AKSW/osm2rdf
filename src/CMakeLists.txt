@@ -43,8 +43,8 @@ if (OpenMP_CXX_FOUND)
     target_link_libraries(osm2rdf_library PUBLIC OpenMP::OpenMP_CXX)
 endif ()
 
-# All users of this library will need at least C++17
-target_compile_features(osm2rdf_library PUBLIC cxx_std_17)
+# All users of this library will need at least C++20
+target_compile_features(osm2rdf_library PUBLIC cxx_std_20)
 
 # IDEs should put the headers in a nice place
 source_group(

@@ -266,10 +266,10 @@ BENCHMARK(Writer_QLEVER_generateLiteral_AT)
 static void Writer_NT_generateLiteral_0xFAFA(benchmark::State& state) {
   osm2rdf::config::Config config;
   osm2rdf::ttl::Writer<osm2rdf::ttl::format::NT> w{config, nullptr};
-  std::string s{u8"\ufafa"};
+  std::string s{"\ufafa"};
   s.reserve(s.length() * state.range(0));
   for (auto i = 1; i < state.range(0); ++i) {
-    s += std::string{u8"\ufafa"};
+    s += std::string{"\ufafa"};
   }
   for (auto _ : state) {
     w.generateLiteral(s, "");
@@ -284,10 +284,10 @@ BENCHMARK(Writer_NT_generateLiteral_0xFAFA)
 static void Writer_TTL_generateLiteral_0xFAFA(benchmark::State& state) {
   osm2rdf::config::Config config;
   osm2rdf::ttl::Writer<osm2rdf::ttl::format::TTL> w{config, nullptr};
-  std::string s{u8"\ufafa"};
+  std::string s{"\ufafa"};
   s.reserve(s.length() * state.range(0));
   for (auto i = 1; i < state.range(0); ++i) {
-    s += std::string{u8"\ufafa"};
+    s += std::string{"\ufafa"};
   }
   for (auto _ : state) {
     w.generateLiteral(s, "");
@@ -302,10 +302,10 @@ BENCHMARK(Writer_TTL_generateLiteral_0xFAFA)
 static void Writer_QLEVER_generateLiteral_0xFAFA(benchmark::State& state) {
   osm2rdf::config::Config config;
   osm2rdf::ttl::Writer<osm2rdf::ttl::format::QLEVER> w{config, nullptr};
-  std::string s{u8"\ufafa"};
+  std::string s{"\ufafa"};
   s.reserve(s.length() * state.range(0));
   for (auto i = 1; i < state.range(0); ++i) {
-    s += std::string{u8"\ufafa"};
+    s += std::string{"\ufafa"};
   }
   for (auto _ : state) {
     w.generateLiteral(s, "");
@@ -366,10 +366,10 @@ BENCHMARK(Writer_QLEVER_utf8Codepoint_AT)
 static void Writer_QLEVER_utf8Codepoint_0xFAFA(benchmark::State& state) {
   osm2rdf::config::Config config;
   osm2rdf::ttl::Writer<osm2rdf::ttl::format::QLEVER> w{config, nullptr};
-  std::string s{u8"\ufafa"};
+  std::string s{"\ufafa"};
   s.reserve(s.length() * state.range(0));
   for (auto i = 1; i < state.range(0); ++i) {
-    s += std::string{u8"\ufafa"};
+    s += std::string{"\ufafa"};
   }
   for (auto _ : state) {
     w.utf8Codepoint(s);
@@ -430,10 +430,10 @@ BENCHMARK(Writer_QLEVER_encodePN_LOCAL_AT)
 static void Writer_QLEVER_encodePN_LOCAL_0xFAFA(benchmark::State& state) {
   osm2rdf::config::Config config;
   osm2rdf::ttl::Writer<osm2rdf::ttl::format::QLEVER> w{config, nullptr};
-  std::string s{u8"\ufafa"};
+  std::string s{"\ufafa"};
   s.reserve(s.length() * state.range(0));
   for (auto i = 1; i < state.range(0); ++i) {
-    s += std::string{u8"\ufafa"};
+    s += std::string{"\ufafa"};
   }
   for (auto _ : state) {
     w.encodePN_LOCAL(s);
