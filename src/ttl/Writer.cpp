@@ -71,6 +71,10 @@ osm2rdf::ttl::Writer<T>::Writer(const osm2rdf::config::Config& config,
       generateIRI(osm2rdf::ttl::constants::NAMESPACE__GEOSPARQL, "hasGeometry");
   osm2rdf::ttl::constants::IRI__GEOSPARQL__WKT_LITERAL =
       generateIRI(osm2rdf::ttl::constants::NAMESPACE__GEOSPARQL, "wktLiteral");
+  osm2rdf::ttl::constants::IRI__GEOSPARQL__AS_WKT =
+      generateIRI(osm2rdf::ttl::constants::NAMESPACE__GEOSPARQL, "asWKT");
+  osm2rdf::ttl::constants::IRI__GEOSPARQL__GEOMETRY =
+      generateIRI(osm2rdf::ttl::constants::NAMESPACE__GEOSPARQL, "Geometry");
   osm2rdf::ttl::constants::IRI__OSM2RDF_CONTAINS_AREA =
       generateIRI(osm2rdf::ttl::constants::NAMESPACE__OSM2RDF, "contains_area");
   osm2rdf::ttl::constants::IRI__OSM2RDF_CONTAINS_NON_AREA = generateIRI(

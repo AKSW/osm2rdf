@@ -292,8 +292,20 @@ void osm2rdf::osm::FactHandler<W>::writeBoostGeometry(const std::string& s,
     tmp << std::fixed << std::setprecision(_config.wktPrecision)
         << boost::geometry::wkt(g);
   }
+
+  // write WKT serialization according to GeoSPARQL standard, i.e.
+  // :s geo:hasGeometry [geo:asWKT "POINT(0.0 0.0)"^^geo:wktLiteral]
+  std::string blankNode = _writer->generateBlankNode();
+
+  _writer->writeTriple(s, p, blankNode);
+
+  // mostly superfluous rdf:type geo:Geometry triple, but Jena spatial
+  // doesn't detect geometries without unless inference is enabled
+  // TODO better to fix it in Jena
+  _writer->writeTriple(blankNode, osm2rdf::ttl::constants::IRI__RDF_TYPE, osm2rdf::ttl::constants::IRI__GEOSPARQL__GEOMETRY);
   _writer->writeTriple(
-      s, p,
+      blankNode,
+      osm2rdf::ttl::constants::IRI__GEOSPARQL__AS_WKT,
       "\"" + tmp.str() + "\"^^" +
           osm2rdf::ttl::constants::IRI__GEOSPARQL__WKT_LITERAL);
 }
