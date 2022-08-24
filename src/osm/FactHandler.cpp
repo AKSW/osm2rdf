@@ -332,11 +332,16 @@ void osm2rdf::osm::FactHandler<W>::writeTag(const std::string& s,
   const std::string& key = tag.first;
   const std::string& value = tag.second;
   if (key == "admin_level") {
+    auto objectValue = _writer->generateLiteral(value, "");
+    // Mark integer values
+    if (value.find_first_not_of("0123456789") == std::string::npos) {
+      objectValue = _writer->generateLiteral(
+          value, "^^" + osm2rdf::ttl::constants::IRI__XSD_INTEGER);
+    }
     _writer->writeTriple(
         s,
         _writer->generateIRI(osm2rdf::ttl::constants::NAMESPACE__OSM_TAG, key),
-        _writer->generateLiteral(
-            value, "^^" + osm2rdf::ttl::constants::IRI__XSD_INTEGER));
+        objectValue);
   } else {
     try {
       _writer->writeTriple(
@@ -389,7 +394,7 @@ void osm2rdf::osm::FactHandler<W>::writeTagList(
     }
     // Handling for wiki tags
     if (!_config.skipWikiLinks) {
-      if (key == "wikidata") {
+      if (key == "wikidata" || hasSuffix(key, ":wikidata")) {
         // Only take first wikidata entry if ; is found
         auto end = value.find(';');
         if (end != std::string::npos) {
@@ -408,19 +413,23 @@ void osm2rdf::osm::FactHandler<W>::writeTagList(
                 osm2rdf::ttl::constants::NAMESPACE__WIKIDATA_ENTITY, value));
         tagTripleCount++;
       }
-      if (key == "wikipedia") {
+      if (key == "wikipedia" || hasSuffix(key, ":wikipedia")) {
         auto pos = value.find(':');
         if (pos != std::string::npos) {
           std::string lang = value.substr(0, pos);
           std::string entry = value.substr(pos + 1);
           _writer->writeTriple(
-              s, osm2rdf::ttl::constants::IRI__OSM_WIKIPEDIA,
+              s,
+              _writer->generateIRI(osm2rdf::ttl::constants::NAMESPACE__OSM,
+                                   key),
               _writer->generateIRI("https://" + lang + ".wikipedia.org/wiki/",
                                    entry));
           tagTripleCount++;
         } else {
           _writer->writeTriple(
-              s, osm2rdf::ttl::constants::IRI__OSM_WIKIPEDIA,
+              s,
+              _writer->generateIRI(osm2rdf::ttl::constants::NAMESPACE__OSM,
+                                   key),
               _writer->generateIRI("https://www.wikipedia.org/wiki/", value));
           tagTripleCount++;
         }
@@ -434,6 +443,16 @@ void osm2rdf::osm::FactHandler<W>::writeTagList(
       _writer->generateLiteral(
           std::to_string(tagTripleCount),
           "^^" + osm2rdf::ttl::constants::IRI__XSD_INTEGER));
+}
+
+// ____________________________________________________________________________
+template <typename W>
+bool osm2rdf::osm::FactHandler<W>::hasSuffix(const std::string& s,
+                                             const std::string& suffix) const {
+  if (s.size() < suffix.size()) {
+    return false;
+  }
+  return strcmp(s.c_str() + s.size() - suffix.size(), suffix.c_str()) == 0;
 }
 
 // ____________________________________________________________________________

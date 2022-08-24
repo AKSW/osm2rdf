@@ -54,6 +54,7 @@ class FactHandler {
 
   void writeTag(const std::string& s, const osm2rdf::osm::Tag& tag);
   FRIEND_TEST(OSM_FactHandler, writeTag_AdminLevel);
+  FRIEND_TEST(OSM_FactHandler, writeTag_AdminLevel_nonInteger);
   FRIEND_TEST(OSM_FactHandler, writeTag_KeyIRI);
   FRIEND_TEST(OSM_FactHandler, writeTag_KeyNotIRI);
 
@@ -66,6 +67,8 @@ class FactHandler {
   FRIEND_TEST(OSM_FactHandler, writeTagListWikipediaWithLang);
   FRIEND_TEST(OSM_FactHandler, writeTagListWikipediaWithoutLang);
   FRIEND_TEST(OSM_FactHandler, writeTagListSkipWikiLinks);
+
+  bool hasSuffix(const std::string& s, const std::string& suffix) const;
 
   const osm2rdf::config::Config _config;
   osm2rdf::ttl::Writer<W>* _writer;
