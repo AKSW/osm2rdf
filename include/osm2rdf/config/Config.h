@@ -68,6 +68,10 @@ struct Config {
   // Dot
   bool writeDAGDotFiles = false;
 
+  // GeoSPARQL conformance
+  bool geosparqlConformance = false;
+  bool geometriesAsIRI = false;
+
   // Statistics
   bool writeGeometricRelationStatistics = false;
   std::filesystem::path geomStatisticsPath;

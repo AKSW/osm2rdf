@@ -388,6 +388,15 @@ void osm2rdf::config::Config::fromArgs(int argc, char** argv) {
       osm2rdf::config::constants::CACHE_OPTION_LONG,
       osm2rdf::config::constants::CACHE_OPTION_HELP, cache);
 
+  auto geosparqlStandardConformanceOp = op.add<popl::Switch, popl::Attribute::advanced>(
+      osm2rdf::config::constants::GEOSPARQL_CONFORMANCE_OPTION_SHORT,
+      osm2rdf::config::constants::GEOSPARQL_CONFORMANCE_OPTION_LONG,
+      osm2rdf::config::constants::GEOSPARQL_CONFORMANCE_OPTION_HELP);
+  auto geometriesAsIriOp = op.add<popl::Switch, popl::Attribute::advanced>(
+      osm2rdf::config::constants::GEOMETRIES_AS_IRI_OPTION_SHORT,
+      osm2rdf::config::constants::GEOMETRIES_AS_IRI_OPTION_LONG,
+      osm2rdf::config::constants::GEOMETRIES_AS_IRI_OPTION_HELP);
+
   try {
     op.parse(argc, argv);
 
@@ -466,6 +475,10 @@ void osm2rdf::config::Config::fromArgs(int argc, char** argv) {
 
     writeGeometricRelationStatistics = writeStatisticsOp->is_set();
     writeRDFStatistics = writeRDFStatisticsOp->is_set();
+
+    // GeoSPARQL RDF data
+    geosparqlConformance = geosparqlStandardConformanceOp->is_set();
+    geometriesAsIRI = geometriesAsIriOp->is_set();
 
     // Output
     output = outputOp->value();

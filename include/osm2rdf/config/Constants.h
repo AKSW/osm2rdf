@@ -319,6 +319,21 @@ const static inline std::string WRITE_RDF_STATISTICS_OPTION_LONG =
 const static inline std::string WRITE_RDF_STATISTICS_OPTION_HELP =
     "Storing RDF statistics as .stats.json";
 
+
+const static inline std::string GEOSPARQL_CONFORMANCE_OPTION_SHORT =
+    "";
+const static inline std::string GEOSPARQL_CONFORMANCE_OPTION_LONG =
+    "geosparql-conformance";
+const static inline std::string GEOSPARQL_CONFORMANCE_OPTION_HELP =
+    "RDF output applies GeoSPARQL standard, i.e. a feature has a geometry which has WKT serialization. ";
+
+const static inline std::string GEOMETRIES_AS_IRI_OPTION_SHORT =
+    "";
+const static inline std::string GEOMETRIES_AS_IRI_OPTION_LONG =
+    "geometries-as-iri";
+const static inline std::string GEOMETRIES_AS_IRI_OPTION_HELP =
+    "RDF output does use IRIs instead of blank nodes to denote geometries. ";
+
 }  // namespace osm2rdf::config::constants
 
 #endif  // OSM2RDF_CONFIG_CONSTANTS_H
