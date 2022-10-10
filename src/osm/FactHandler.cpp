@@ -39,13 +39,12 @@ osm2rdf::osm::FactHandler<W>::FactHandler(const osm2rdf::config::Config& config,
 // ____________________________________________________________________________
 template <typename W>
 void osm2rdf::osm::FactHandler<W>::area(const osm2rdf::osm::Area& area) {
-  std::string s = _writer->generateIRI(
-      area.fromWay() ? osm2rdf::ttl::constants::NAMESPACE__OSM_WAY
-                     : osm2rdf::ttl::constants::NAMESPACE__OSM_RELATION,
-      area.objId());
+  std::string ns = area.fromWay() ? osm2rdf::ttl::constants::NAMESPACE__OSM_WAY
+                               : osm2rdf::ttl::constants::NAMESPACE__OSM_RELATION;
+  std::string s = _writer->generateIRI(ns, area.objId());
 
   writeBoostGeometry(s, osm2rdf::ttl::constants::IRI__GEOSPARQL__HAS_GEOMETRY,
-                     area.geom());
+                     area.geom(), area.objId(), ns);
 
   if (_config.addAreaEnvelope) {
     writeBox(s, osm2rdf::ttl::constants::IRI__OSM_META__ENVELOPE,
@@ -89,7 +88,7 @@ void osm2rdf::osm::FactHandler<W>::node(const osm2rdf::osm::Node& node) {
                        osm2rdf::ttl::constants::IRI__OSM_NODE);
 
   writeBoostGeometry(s, osm2rdf::ttl::constants::IRI__GEOSPARQL__HAS_GEOMETRY,
-                     node.geom());
+                     node.geom(), node.id(), osm2rdf::ttl::constants::NAMESPACE__OSM_NODE);
 
   writeTagList(s, node.tags());
 
@@ -195,7 +194,7 @@ void osm2rdf::osm::FactHandler<W>::way(const osm2rdf::osm::Way& way) {
 
         writeBoostGeometry(
             s, osm2rdf::ttl::constants::IRI__GEOSPARQL__HAS_GEOMETRY,
-            node.geom());
+            node.geom(), node.id(), osm2rdf::ttl::constants::NAMESPACE__OSM_NODE);
       }
 
       if (_config.addWayNodeSpatialMetadata && !lastBlankNode.empty()) {
@@ -231,7 +230,7 @@ void osm2rdf::osm::FactHandler<W>::way(const osm2rdf::osm::Way& way) {
   osm2rdf::geometry::Linestring locations{way.geom()};
   size_t numUniquePoints = locations.size();
   writeBoostGeometry(s, osm2rdf::ttl::constants::IRI__GEOSPARQL__HAS_GEOMETRY,
-                     locations);
+                     locations, way.id(), osm2rdf::ttl::constants::NAMESPACE__OSM_WAY);
 
   if (_config.addWayEnvelope) {
     writeBox(s, osm2rdf::ttl::constants::IRI__OSM_META__ENVELOPE,
@@ -269,7 +268,9 @@ template <typename W>
 template <typename G>
 void osm2rdf::osm::FactHandler<W>::writeBoostGeometry(const std::string& s,
                                                       const std::string& p,
-                                                      const G& g) {
+                                                      const G& g,
+                                                      const uint64_t& id,
+                                                      const std::string& ns) {
   std::ostringstream tmp;
   if (_config.simplifyWKT > 0 &&
       boost::geometry::num_points(g) > _config.simplifyWKT) {
@@ -298,7 +299,7 @@ void osm2rdf::osm::FactHandler<W>::writeBoostGeometry(const std::string& s,
     // :s geo:hasGeometry [geo:asWKT "POINT(0.0 0.0)"^^geo:wktLiteral]
     std::string geometryNode;
     if (_config.geometriesAsIRI) {
-      geometryNode = _writer->generateIRI(s, "/geometry");
+      geometryNode = _writer->generateIRI(ns, std::to_string(id) + "/geometry");
     } else {
       geometryNode = _writer->generateBlankNode();
     }

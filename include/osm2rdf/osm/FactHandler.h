@@ -41,7 +41,7 @@ class FactHandler {
  protected:
   template <typename G>
   void writeBoostGeometry(const std::string& s, const std::string& p,
-                          const G& g);
+                          const G& g, const uint64_t& id, const std::string& ns);
   FRIEND_TEST(OSM_FactHandler, writeBoostGeometryWay);
   FRIEND_TEST(OSM_FactHandler, writeBoostGeometryWaySimplify1);
   FRIEND_TEST(OSM_FactHandler, writeBoostGeometryWaySimplify2);
