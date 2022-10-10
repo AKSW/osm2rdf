@@ -975,7 +975,7 @@ TEST(OSM_FactHandler, writeBoostGeometryWay) {
   way.push_back(osm2rdf::geometry::Location{0, 80});
   way.push_back(osm2rdf::geometry::Location{0, 1000});
 
-  dh.writeBoostGeometry(subject, predicate, way);
+  dh.writeBoostGeometry(subject, predicate, way, 0, "");
   output.flush();
   output.close();
 
@@ -1020,7 +1020,7 @@ TEST(OSM_FactHandler, writeBoostGeometryWaySimplify1) {
   way.push_back(osm2rdf::geometry::Location{0, 500});
   way.push_back(osm2rdf::geometry::Location{0, 1000});
 
-  dh.writeBoostGeometry(subject, predicate, way);
+  dh.writeBoostGeometry(subject, predicate, way, 0, "");
   output.flush();
   output.close();
 
@@ -1061,7 +1061,7 @@ TEST(OSM_FactHandler, writeBoostGeometryWaySimplify2) {
   way.push_back(osm2rdf::geometry::Location{0, 80});
   way.push_back(osm2rdf::geometry::Location{100, 1000});
 
-  dh.writeBoostGeometry(subject, predicate, way);
+  dh.writeBoostGeometry(subject, predicate, way, 0, "");
   output.flush();
   output.close();
 
@@ -1103,7 +1103,7 @@ TEST(OSM_FactHandler, writeBoostGeometryWaySimplify3) {
   way.push_back(osm2rdf::geometry::Location{0, 80});
   way.push_back(osm2rdf::geometry::Location{100, 1000});
 
-  dh.writeBoostGeometry(subject, predicate, way);
+  dh.writeBoostGeometry(subject, predicate, way, 0, "");
   output.flush();
   output.close();
 
